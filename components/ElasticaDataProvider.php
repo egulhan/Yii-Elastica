@@ -66,10 +66,14 @@ class ElasticaDataProvider extends CDataProvider{
     if (($pagination = $this->getPagination()) !== false) {
       $limit = $pagination->pageSize;
       $current_page = Yii::app()->request->getParam($this->getPagination()->pageVar, 0);
-      $current_page++;
+     
+        if(!isset($current_page) || $current_page==0)
+          $current_page=1;
 
-      $skip = --$current_page * $limit;
+        $es_current_page=$current_page-1;
 
+        $skip = $es_current_page * $limit;
+     
       if ($skip >= $this->_count) {
         $skip = 0;
         $this->getPagination()->setCurrentPage(0);
